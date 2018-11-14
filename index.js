@@ -1,4 +1,4 @@
-var DEFAULT_PORT = process.env.PORT || 8000;
+var DEFAULT_PORT = process.env.PORT || 8080;
 var DEFAULT_HOST = '127.0.0.1'
 var SERVER_NAME = 'healthrecords'
 var getRequestCounter = 0;
