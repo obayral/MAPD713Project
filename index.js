@@ -1,5 +1,5 @@
-var port = process.env.PORT || 8080;
-//var DEFAULT_HOST = '127.0.0.1'
+var DEFAULT_PORT = process.env.PORT || 8080;
+var DEFAULT_HOST = '127.0.0.1'
 var SERVER_NAME = 'healthrecords'
 var getRequestCounter = 0;
 var postRequestCounter = 0;
@@ -10,6 +10,7 @@ var patientArray = [];
 var http = require ('http');
 var mongoose = require ("mongoose");
 
+var port = process.env.PORT;
 var ipaddress = process.env.IP; // TODO: figure out which IP to use for the heroku
 
 // Here we find an appropriate database to connect to, defaulting to
@@ -59,7 +60,8 @@ var restify = require('restify')
 	};
 
 	if (typeof port === "undefined") {
-		console.warn('No process.env.PORT var, using default port: ' + port);
+		console.warn('No process.env.PORT var, using default port: ' + DEFAULT_PORT);
+		port = DEFAULT_PORT;
 	};
   
   
