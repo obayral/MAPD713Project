@@ -1,4 +1,4 @@
-var DEFAULT_PORT = process.env.PORT || 8080;
+var DEFAULT_PORT = process.env.PORT || 8000;
 var DEFAULT_HOST = '127.0.0.1'
 var SERVER_NAME = 'healthrecords'
 var getRequestCounter = 0;
@@ -18,7 +18,7 @@ var ipaddress = process.env.IP; // TODO: figure out which IP to use for the hero
 var uristring = 
   process.env.MONGODB_URI || 
   'mongodb://tekstil:teksdev07@ds151753.mlab.com:51753/mapd713groupproject';
-  //'mongodb://localhost/e-health-db';
+  //'mongodb://localhost/e-health-db';a
 
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.
