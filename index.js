@@ -16,8 +16,8 @@ var ipaddress = process.env.IP; // TODO: figure out which IP to use for the hero
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.  
 var uristring = 
-  process.env.MONGODB_URI || 'mongodb://localhost/e-health-db';
-  //'mongodb://tekstil:teksdev07@ds151753.mlab.com:51753/mapd713groupproject';
+  process.env.MONGODB_URI || //'mongodb://localhost/e-health-db';
+  'mongodb://tekstil:teksdev07@ds151753.mlab.com:51753/mapd713groupproject';
   
 
 // Makes connection asynchronously.  Mongoose will queue up database
@@ -61,7 +61,7 @@ var restify = require('restify')
 
   
   
-  server.listen(DEFAULT_PORT, ipaddress, function () {
+  server.listen(DEFAULT_PORT, function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
