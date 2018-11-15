@@ -16,9 +16,9 @@ var ipaddress = process.env.IP; // TODO: figure out which IP to use for the hero
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.  
 var uristring = 
-  process.env.MONGODB_URI || //'mongodb://localhost/e-health-db';
+  process.env.MONGODB_URI || 
   'mongodb://tekstil:teksdev07@ds151753.mlab.com:51753/mapd713groupproject';
-  
+  //'mongodb://localhost/e-health-db';
 
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.
@@ -35,7 +35,7 @@ mongoose.connect(uristring, function (err, res) {
 var patientSchema = new mongoose.Schema({
   first_name: String,
   last_name: String, 
-  blood_gorup: String, 
+  blood_group: String, 
   address: String, 
   date_of_birth: String, 
   date_admitted: String, 
@@ -109,6 +109,7 @@ server.get('/patients/:id', function (req, res, next) {
       // Send the patient if no issues
       res.send(patient)
       console.log('Sending response to GET request.');
+      console.log('OK');
     } else {
       // Send 404 header if the patient doesn't exist
       res.send(404)
@@ -163,7 +164,7 @@ server.post('/patients', function (req, res, next) {
   var newpatient = {
 		first_name: req.params.first_name, 
     last_name: req.params.last_name,
-    blood_gorup: req.params.blood_gorup,
+    blood_group: req.params.blood_group,
     address: req.params.address,
     date_of_birth: req.params.date_of_birth,
     date_admitted: req.params.date_admitted,
