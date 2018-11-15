@@ -10,7 +10,7 @@ var patientArray = [];
 var http = require ('http');
 var mongoose = require ("mongoose");
 
-var port = process.env.PORT;
+//var port = process.env.PORT;
 var ipaddress = process.env.IP; // TODO: figure out which IP to use for the heroku
 
 // Here we find an appropriate database to connect to, defaulting to
@@ -18,7 +18,7 @@ var ipaddress = process.env.IP; // TODO: figure out which IP to use for the hero
 var uristring = 
   process.env.MONGODB_URI || 
   'mongodb://tekstil:teksdev07@ds151753.mlab.com:51753/mapd713groupproject';
-  //'mongodb://localhost/e-health-db';a
+  //'mongodb://localhost/e-health-db';
 
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.
@@ -59,13 +59,9 @@ var restify = require('restify')
 		ipaddress = DEFAULT_HOST;
 	};
 
-	if (typeof port === "undefined") {
-		console.warn('No process.env.PORT var, using default port: ' + DEFAULT_PORT);
-		port = DEFAULT_PORT;
-	};
   
   
-  server.listen(port, ipaddress, function () {
+  server.listen(DEFAULT_PORT, ipaddress, function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
