@@ -1,0 +1,1 @@
+server.post('/patients/:id/records', function (req, res, next) {

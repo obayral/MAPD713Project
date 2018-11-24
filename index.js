@@ -1,4 +1,4 @@
-var DEFAULT_PORT = process.env.PORT || 8080;
+var DEFAULT_PORT = process.env.PORT || 8000;
 var DEFAULT_HOST = '127.0.0.1'
 var SERVER_NAME = 'healthrecords'
 var getRequestCounter = 0;
@@ -44,9 +44,19 @@ var patientSchema = new mongoose.Schema({
   ailment:String, 
 });
 
+var patientRecordsSchema = new mongoose.Schema({
+  patient_id: String,
+  pulse: String,
+  nurse_name: String,
+  allergy: String,
+  BMI: String,
+  surgery: String
+});
+
 // Compiles the schema into a model, opening (or creating, if
 // nonexistent) the 'Patients' collection in the MongoDB database
 var Patient = mongoose.model('Patient', patientSchema);
+var PatientRecord = mongoose.model('PatientRecord', patientRecordsSchema);
 
 var restify = require('restify')
   // Create the restify server
@@ -61,7 +71,7 @@ var restify = require('restify')
 
   
   
-  server.listen(DEFAULT_PORT, function () {
+  server.listen(DEFAULT_PORT,ipaddress, function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
@@ -105,7 +115,7 @@ server.get('/patients/:id', function (req, res, next) {
     // If there are any errors, pass them to next in the correct format
     if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
 
-    if (patients) {
+    if (patient) {
       // Send the patient if no issues
       res.send(patient)
       console.log('Sending response to GET request.');
@@ -292,3 +302,122 @@ server.del('/patients', function (req, res) {
     console.log('Sending response to DELETE request.');
   })
 })
+
+
+
+
+// Create a new patient record by patients it
+server.post('/patients/:id/records', function (req, res, next) {
+  console.log('RECORDS POSTTTT LOLOLOO request.');
+  postRequestCounter++;
+  console.log('received POST request.');
+  console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
+  
+  if (req.params.patient_id === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('patient_id must be supplied'))
+  }
+  if (req.params.pulse === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('pulse must be supplied'))
+  }
+  if (req.params.nurse_name === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('nurse_name must be supplied'))
+  }
+  if (req.params.allergy === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('allergy must be supplied'))
+  }
+  if (req.params.bmi === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('bmi must be supplied'))
+  }
+  if (req.params.surgery === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('surgery must be supplied'))
+  }
+  
+  var newpatientrecord = {
+      patient_id: req.body.patient_id,
+      pulse: req.body.pulse,
+      nurse_name: req.body.nurse_name,
+      allergy: req.body.allergy,
+      BMI: req.body.bmi,
+      surgery: req.body.surgery
+  }
+  
+  // Create the patient using the persistence engine
+  PatientRecord.create( newpatientrecord, function (error, record) {
+    
+    // If there are any errors, pass them to next in the correct format
+    if (error) {
+      console.log('Error on creating patient record.');
+      return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
+    }
+    
+    // Send the patient if no issues
+    res.send(201, record)
+   })
+  console.log('Sending response to POST request.');
+})
+
+
+
+// Get patient records by its patient id
+server.get('/patients/:id/records', function (req, res, next) {
+  console.log('************GET RECORDS request. PATIENT ID =' + req.params.id);
+  getRequestCounter++;
+  console.log('received GET request.');
+  console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
+  
+  // Find a single patient by their id within save
+  Patient.findOne({ _id: req.params.id }, function (error, patient) {
+
+    // If there are any errors, pass them to next in the correct format
+    if (error){
+      console.log(error)
+      return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+    } 
+    if (!patient) {
+      console.log(`->No patient with ID [${req.params.id}] found`);
+      res.send(404)
+   }else{
+    console.log(`hahahah`);
+      PatientRecord.find({}, function (error, records) {
+          // If there are any errors, pass them to next in the correct format
+        if (error){
+          console.log(error)
+          return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        } 
+        if (!records) {
+          console.log(`->No patient record with Patient ID [${req.params.id}] found`);
+          res.send(404)
+      }
+        else{
+          res.send(records)
+          console.log('Sending response to GET request.');
+          console.log('OK');
+        }
+      })
+    }
+  })
+})
+
+// Delete all patients in the system
+server.del('/patients/:id/records', function (req, res) {
+  
+  deleteRequestCounter++;
+  console.log('received DELETE request for PATIENT RECORDS.');
+  console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
+  
+  // Find every entity within the given collection
+  PatientRecord.deleteMany({patient_id: req.params.patient_id}, function (error) {
+
+    // Return all of the patients in the system
+    res.send()
+    console.log('Sending response to DELETE request.');
+  })
+})
+
+
