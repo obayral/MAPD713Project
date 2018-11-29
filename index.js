@@ -53,10 +53,16 @@ var patientRecordsSchema = new mongoose.Schema({
   surgery: String
 });
 
+var userSchema = new mongoose.Schema({
+  username: String,
+  password: String
+});
+
 // Compiles the schema into a model, opening (or creating, if
 // nonexistent) the 'Patients' collection in the MongoDB database
 var Patient = mongoose.model('Patient', patientSchema);
 var PatientRecord = mongoose.model('PatientRecord', patientRecordsSchema);
+var User = mongoose.model('User', userSchema);
 
 var restify = require('restify')
   // Create the restify server
@@ -71,7 +77,7 @@ var restify = require('restify')
 
   
   //delete the ipaddress parameter while deploting to heroku. Otherwise, use the ipaddress parameter in local.
-  server.listen(DEFAULT_PORT, function () {
+  server.listen(DEFAULT_PORT,ipaddress, function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
@@ -87,6 +93,42 @@ var restify = require('restify')
     .use(restify.plugins.bodyParser())
 
   
+// Create a new user
+server.post('/register', function (req, res, next) {
+  postRequestCounter++;
+  console.log('received POST request.');
+  console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
+  
+  // Make sure first_name is defined
+  if (req.params.username === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('username must be supplied'))
+  }
+  if (req.params.password === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('password must be supplied'))
+  }
+  
+ var newuser = {
+		username: req.params.username, 
+    password: req.params.password,
+  }
+  
+  // Create the user using the persistence engine
+  User.create( newuser, function (error, user) {
+    
+    // If there are any errors, pass them to next in the correct format
+    if (error) {
+      console.log('Error on creating patient.');
+      return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
+    }
+    
+    // Send the patient if no issues
+    res.send(201, user)
+  })
+  console.log('Sending response to POST request.');
+})
+
   
   
    // Get all patients in the system
