@@ -384,7 +384,7 @@ server.get('/patients/:id/records', function (req, res, next) {
       res.send(404)
    }else{
     console.log(`hahahah`);
-      PatientRecord.find({}, function (error, records) {
+      PatientRecord.find({patient_id: req.params.id}, function (error, records) {
           // If there are any errors, pass them to next in the correct format
         if (error){
           console.log(error)
