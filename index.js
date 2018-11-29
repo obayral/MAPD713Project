@@ -77,7 +77,7 @@ var restify = require('restify')
 
   
   //delete the ipaddress parameter while deploting to heroku. Otherwise, use the ipaddress parameter in local.
-  server.listen(DEFAULT_PORT,ipaddress, function () {
+  server.listen(DEFAULT_PORT, function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
