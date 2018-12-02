@@ -77,7 +77,7 @@ var restify = require('restify')
 
   
   //delete the ipaddress parameter while deploting to heroku. Otherwise, use the ipaddress parameter in local.
-  server.listen(DEFAULT_PORT, function () {
+  server.listen(DEFAULT_PORT,function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
@@ -92,7 +92,30 @@ var restify = require('restify')
     // Maps req.body to req.params so there is no switching between them
     .use(restify.plugins.bodyParser())
 
-  
+
+// Get a single patient by its patient id
+server.get('/login/:username', function (req, res, next) {
+  getRequestCounter++;
+  console.log('received GET request.');
+  console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
+  // Find a single patient by their id within save
+  User.findOne({ username: req.params.username}, function (error, user) {
+
+    // If there are any errors, pass them to next in the correct format
+    if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+
+    if (user) {
+      // Send the patient if no issues
+      res.send(user)
+      console.log('Sending response to GET request.');
+      console.log('OK');
+    } else {
+      // Send 404 header if the patient doesn't exist
+      res.send(404)
+      console.log("Error occurred in sending Response.");
+    }
+  })
+})
 // Create a new user
 server.post('/register', function (req, res, next) {
   postRequestCounter++;
