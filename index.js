@@ -83,7 +83,7 @@ var restify = require('restify')
 
   
   //delete the ipaddress parameter while deploting to heroku. Otherwise, use the ipaddress parameter in local.
-  server.listen(DEFAULT_PORT,ipaddress,function () {
+  server.listen(DEFAULT_PORT,function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
@@ -134,32 +134,32 @@ server.post('/register', function (req, res, next) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('first_name must be supplied'))
   }
-  // Make sure first_name is defined
+  // Make sure last_name is defined
   if (req.params.last_name === undefined ) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('last_name must be supplied'))
   }
-  // Make sure first_name is defined
+  // Make sure mail_address is defined
   if (req.params.mail_address === undefined ) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('mail_address must be supplied'))
   }
-  // Make sure first_name is defined
+  // Make sure phone is defined
   if (req.params.phone === undefined ) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('phone must be supplied'))
   }
-  // Make sure first_name is defined
+  // Make sure department is defined
   if (req.params.department === undefined ) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('department must be supplied'))
   }
-  // Make sure first_name is defined
+  // Make sure position is defined
   if (req.params.position === undefined ) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('department must be supplied'))
   }
-  // Make sure first_name is defined
+  // Make sure username is defined
   if (req.params.username === undefined ) {
     // If there are any errors, pass them to next in the correct format
     return next(new restify.InvalidArgumentError('username must be supplied'))
@@ -185,7 +185,7 @@ server.post('/register', function (req, res, next) {
     
     // If there are any errors, pass them to next in the correct format
     if (error) {
-      console.log('Error on creating patient.');
+      console.log('Error on creating user.');
       return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
     }
     
