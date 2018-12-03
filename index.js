@@ -54,6 +54,12 @@ var patientRecordsSchema = new mongoose.Schema({
 });
 
 var userSchema = new mongoose.Schema({
+  first_name: String,
+  last_name: String,
+  mail_address: String,
+  phone: String,
+  department: String,
+  position: String, 
   username: String,
   password: String
 });
@@ -77,7 +83,7 @@ var restify = require('restify')
 
   
   //delete the ipaddress parameter while deploting to heroku. Otherwise, use the ipaddress parameter in local.
-  server.listen(DEFAULT_PORT,function () {
+  server.listen(DEFAULT_PORT,ipaddress,function () {
   console.log('Server %s listening at %s', server.name, server.url)
   console.log('Resources:')
   console.log(' /patients')
@@ -122,6 +128,37 @@ server.post('/register', function (req, res, next) {
   console.log('received POST request.');
   console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
   
+  
+  // Make sure first_name is defined
+  if (req.params.first_name === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('first_name must be supplied'))
+  }
+  // Make sure first_name is defined
+  if (req.params.last_name === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('last_name must be supplied'))
+  }
+  // Make sure first_name is defined
+  if (req.params.mail_address === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('mail_address must be supplied'))
+  }
+  // Make sure first_name is defined
+  if (req.params.phone === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('phone must be supplied'))
+  }
+  // Make sure first_name is defined
+  if (req.params.department === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('department must be supplied'))
+  }
+  // Make sure first_name is defined
+  if (req.params.position === undefined ) {
+    // If there are any errors, pass them to next in the correct format
+    return next(new restify.InvalidArgumentError('department must be supplied'))
+  }
   // Make sure first_name is defined
   if (req.params.username === undefined ) {
     // If there are any errors, pass them to next in the correct format
@@ -133,8 +170,14 @@ server.post('/register', function (req, res, next) {
   }
   
  var newuser = {
-		username: req.params.username, 
-    password: req.params.password,
+    first_name: req.params.first_name,
+    last_name: req.params.last_name,
+    mail_address: req.params.mail_address,
+    phone: req.params.phone,
+    department: req.params.department,
+    position: req.params.position,
+    username: req.params.username, 
+    password: req.params.password
   }
   
   // Create the user using the persistence engine
