@@ -6,7 +6,8 @@
         "mongod": "^2.0.0",
         "mongodb": "^3.1.8",
         "mongoose": "^5.3.9",
-        "restify": "4.1.1",
+        "nodemon": "^1.19.1",
+        "restify": "^8.3.3",
         "save": "2.3.0"
     },
     "author": "Oguz Bayral",
