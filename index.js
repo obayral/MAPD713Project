@@ -126,6 +126,7 @@ server.get('/login/:username', function (req, res, next) {
 server.post('/register', function (req, res, next) {
   postRequestCounter++;
   console.log('received POST request.');
+  console.log("new user request");
   console.log("Processed Request Counter --> GET: " +  getRequestCounter + ", POST: " + postRequestCounter + ", PUT: " + putRequestCounter +", DELETE: " +deleteRequestCounter);
   
   
